@@ -26,9 +26,3 @@ void run_game_loop(GameState* game);             // Lance la boucle de jeu
 // Gestion des tours
 void handle_player_turn(Player* player, GameState* game); // Logique d'un tour
 
-// Utilitaires
-void calculate_final_scores(GameState* game);    // Calcule tous les scores finaux
-bool check_game_end_condition(GameState* game);  // Vérifie si un joueur a gagné
-
-// Sauvegarde
-void save_current_game(const GameState* game);   // Sauvegarde l'état actuel
