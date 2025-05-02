@@ -1,4 +1,29 @@
-
+void initialiserJeuCartes(Carte jeu[], int *taille) {
+    int index = 0;
+    for (int i = 0; i < 5; i++) {
+        jeu[index].value = -2;
+        jeu[index].visible = 0; 
+        index++;
+    }
+    for (int i = 0; i < 10; i++) {
+        jeu[index].value = -1;
+        jeu[index].visible = 0;
+        index++;
+    }
+    *taille = index; 
+}
+void echangerCartes(Carte *cartePioche, Carte *cartePerso) {
+    Carte temp = *cartePioche;  
+    *cartePioche = *cartePerso; 
+    *cartePerso = temp;         
+    cartePerso->visible = 1;   
+void calculerScore(Joueur *j) {
+    j->score = 0; 
+    for (int i = 0; i < j->nbCartes; i++) {
+        j->score += j->cartesPersonnelles[i].value;
+    }
+}
+}
 int demander_valeur() {
     int valeur;
 
