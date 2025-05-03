@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "save.h"
+#include "game.h"
+#include "player.h"
+#include "cards.h"
 
 int sauvegarder_jeu(const Jeu* jeu, const char* nom_fichier) {
     FILE* f = fopen(nom_fichier, "w");
     if (!f) return 0;
 
-    // Sauvegarde des données du jeu
     fprintf(f, "%d %d\n", jeu->nb_joueurs, jeu->nb_pioche);
+
     for (int i = 0; i < jeu->nb_pioche; ++i)
         fprintf(f, "%d %d\n", jeu->pioche[i].valeur, jeu->pioche[i].visible);
 
@@ -20,7 +24,8 @@ int sauvegarder_jeu(const Jeu* jeu, const char* nom_fichier) {
             fprintf(f, "%d %d\n", j->defausse[k].valeur, j->defausse[k].visible);
     }
 
-fclose(f);
+    fprintf(f, "%d\n", jeu->tour_actuel);
+    fclose(f);
     return 1;
 }
 
@@ -47,9 +52,8 @@ int charger_jeu(Jeu* jeu, const char* nom_fichier) {
             fscanf(f, "%d %d", &j->defausse[k].valeur, &j->defausse[k].visible);
     }
 
-    jeu->tour_actuel = 0;
+    fscanf(f, "%d", &jeu->tour_actuel);
     jeu->jeu_termine = 0;
-
     fclose(f);
     return 1;
 }
