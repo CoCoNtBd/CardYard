@@ -1,32 +1,35 @@
-// game.h
-#pragma once
+#ifndef GAME_H
+#define GAME_H
 
-#include "player.h"
 #include "cards.h"
-#include "display.h"
-#include "save.h"
-#include "utils.h"
-#include <stdbool.h>
+#include "player.h"
 
+// Structure principale représentant une partie
 typedef struct {
-    Player* players;          // Tableau dynamique de joueurs
-    Deck central_pile;        // Pioche centrale
-    int current_player;       // Index du joueur actuel (0-based)
-    int total_players;        // Nombre total de joueurs (2-8)
-    bool game_over;           // État de fin de partie
-} GameState;
+    Carte* pioche;         // Pioche centrale
+    int nb_pioche;
 
-// Initialisation/Destruction
-void init_game(GameState* game, int n_players);  // Crée une nouvelle partie
-void cleanup_game(GameState* game);              // Libère la mémoire
+    Joueur* joueurs;       // Tableau de joueurs
+    int nb_joueurs;
 
-// Flux principal
-void run_game_loop(GameState* game);             // Lance la boucle de jeu
+    int tour_actuel;       // Index du joueur dont c’est le tour
+    int jeu_termine;       // Booléen : 1 si le jeu est fini
+} Jeu;
 
-// Gestion des tours
-void handle_player_turn(Player* player, GameState* game); // Logique d'un tour
+// Initialise une partie complète
+void initialiser_jeu(Jeu* jeu, int nb_joueurs, int nb_cartes_par_joueur);
 
-// Utilitaires
-void calculate_final_scores(GameState* game);    // Calcule tous les scores finaux
-bool check_game_end_condition(GameState* game);  // Vérifie si un joueur a gagné
+// Distribue les cartes de la pioche à chaque joueur
+void distribuer_cartes(Jeu* jeu);
+
+// Joue un tour complet pour le joueur courant
+void jouer_tour(Jeu* jeu);
+
+// Vérifie si la partie est terminée (un joueur a toutes ses cartes visibles)
+int verifier_fin_partie(Jeu* jeu);
+
+// Calcule les scores finaux et les stocke dans un tableau externe
+void calculer_scores(const Jeu* jeu, int* scores);
+
+#endif
 
