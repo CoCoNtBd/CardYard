@@ -1,20 +1,27 @@
-// player.h
-#pragma once 
+#ifndef PLAYER_H
+#define PLAYER_H
+
+#include "cards.h"
 
 typedef struct {
-    int value;
-    int is_visible; // 0 = cachée, 1 = visible
-} Card;
+    char nom[50];           // Nom du joueur
+    Carte* cartes;          // Cartes personnelles
+    int nb_cartes;
 
-typedef struct {
-    char name[20];
-    Card* personal_cards;    
-    Card* discard_pile;      
-    int num_personal_cards;  
-    int discard_count;       
-    int discard_capacity;    
-} Player;
+    Carte* defausse;        // Cartes défaussées
+    int nb_defausse;
+} Joueur;
 
-void init_player(Player* p, const char* name, int n_cards);
-void cleanup_player(Player* p);
-int swap_card(Player* p, int card_index, Card new_card);
+// Initialise un joueur avec un nombre de cartes
+void initialiser_joueur(Joueur* joueur, int nb_cartes);
+
+// Vérifie si toutes les cartes du joueur sont visibles
+int toutes_cartes_visibles(const Joueur* joueur);
+
+// Ajoute une carte dans la défausse du joueur
+void ajouter_a_defausse(Joueur* joueur, Carte c);
+
+// Échange une carte d'un joueur avec une nouvelle
+void echanger_carte(Joueur* joueur, Carte nouvelle, int index_carte);
+
+#endif
