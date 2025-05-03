@@ -1,82 +1,36 @@
-#include "player.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "player.h"
+#include "cards.h"
 
-
-// 1. Initialisation (Allocation Mémoire)
-
-void init_player(Player* p, const char* name, int n_cards) {
-    // Copie du nom
-    strncpy(p->name, name, 19);
-    p->name[19] = '\0';
-
-    // Allocation des cartes personnelles
-    p->personal_cards = malloc(n_cards * sizeof(Card));
-    if (!p->personal_cards) {
-        printf("Erreur mémoire !\n");
-        exit(1);
-    }
-
-    // Initialisation à zéro
-    for (int i = 0; i < n_cards; i++) {
-        p->personal_cards[i].value = 0;
-        p->personal_cards[i].is_visible = 0;
-    }
-    p->num_personal_cards = n_cards;
-
-    // Allocation défausse (capacité initiale : 10 cartes)
-    p->discard_capacity = 10;
-    p->discard_pile = malloc(p->discard_capacity * sizeof(Card));
-    if (!p->discard_pile) {
-        free(p->personal_cards); // Nettoyage partiel
-        printf("Erreur mémoire !\n");
-        exit(1);
-    }
-    p->discard_count = 0;
+// Initialise un joueur avec un nom et un nombre de cartes
+void initialiser_joueur(Joueur* joueur, int nb_cartes) {
+    joueur->nb_cartes = nb_cartes;
+    joueur->cartes = malloc(nb_cartes * sizeof(Carte));
+    joueur->nb_defausse = 0;
+    joueur->defausse = NULL;
 }
 
-
-// 2. Nettoyage (Libération Mémoire)
-
-void cleanup_player(Player* p) {
-    free(p->personal_cards);  // Libère les cartes perso
-    free(p->discard_pile);    // Libère la défausse
-    // On remet tout à zéro par sécurité
-    p->personal_cards = NULL;
-    p->discard_pile = NULL;
-    p->num_personal_cards = 0;
-    p->discard_count = 0;
+// Vérifie si toutes les cartes du joueur sont visibles
+int toutes_cartes_visibles(const Joueur* joueur) {
+    for (int i = 0; i < joueur->nb_cartes; ++i) {
+        if (!joueur->cartes[i].visible)
+            return 0;
+    }
+    return 1;
 }
 
+// Ajoute une carte dans la défausse du joueur
+void ajouter_a_defausse(Joueur* joueur, Carte c) {
+    joueur->defausse = realloc(joueur->defausse, sizeof(Carte) * (joueur->nb_defausse + 1));
+    joueur->defausse[joueur->nb_defausse++] = c;
+}
 
-// 3. Échange de carte (Gestion dynamique de la défausse)
--
-int swap_card(Player* p, int card_index, Card new_card) {
-    // Vérification de l'indice
-    if (card_index < 0 || card_index >= p->num_personal_cards) {
-        printf("Mauvaise carte !\n");
-        return -1;
-    }
-
-    // Récupère l'ancienne carte
-    Card old_card = p->personal_cards[card_index];
-
-    // Vérifie si la défausse est pleine
-    if (p->discard_count >= p->discard_capacity) {
-        printf("Défausse pleine !\n");
-        return -1;
-    }
-
-    // Ajoute à la défausse (face visible)
-    old_card.is_visible = 1;
-    p->discard_pile[p->discard_count] = old_card;
-    p->discard_count++;
-
-    // Met la nouvelle carte (face visible)
-    new_card.is_visible = 1;
-    p->personal_cards[card_index] = new_card;
-
-    printf("[%s] Échange réussi !\n", p->name);
-    return 0;
+// Échange une carte du joueur avec une nouvelle carte (indexé)
+void echanger_carte(Joueur* joueur, Carte nouvelle, int index_carte) {
+    Carte ancienne = joueur->cartes[index_carte];
+    joueur->cartes[index_carte] = nouvelle;
+    joueur->cartes[index_carte].visible = 1;
+    ajouter_a_defausse(joueur, ancienne);
 }
