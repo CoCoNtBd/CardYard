@@ -1,78 +1,33 @@
-#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include "utils.h"
 
-int* loadValuesFromFile(const char* filename, int* totalCards) {
-    FILE* file = fopen(filename, "r");
-    if (!file) {
-        errorHandler(2); 
-        return NULL;
-    }
-
-    int* values = malloc(100 * sizeof(int)); 
-    int capacity = 100;
-    *totalCards = 0;
-
-    int value, count;
-    while (fscanf(file, "%d:%d", &value, &count) == 2) {
-        if (*totalCards + count > capacity) {
-            capacity *= 2;
-            values = realloc(values, capacity * sizeof(int));
-        }
-        for (int i = 0; i < count; i++) {
-            values[(*totalCards)++] = value;
-        }
-    }
-
-    fclose(file);
-    return values;
+// Efface le tampon d'entrée
+void vider_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
-int* getUserDefinedValues(int* totalCards) {
-    printf("Entrez les valeurs (format 'valeur:quantité'), terminez par 'fin':\n");
-    
-    int* values = malloc(50 * sizeof(int));
-    *totalCards = 0;
-    char input[50];
-
-    while (1) {
-        printf("> ");
-        fgets(input, 50, stdin);
-        
-        if (strcmp(input, "fin\n") == 0) break;
-
-        int value, count;
-        if (sscanf(input, "%d:%d", &value, &count) == 2) {
-            values = realloc(values, (*totalCards + count) * sizeof(int));
-            for (int i = 0; i < count; i++) {
-                values[(*totalCards)++] = value;
-            }
+// Saisie sécurisée d'un entier
+int demander_entier(const char* message, int min, int max) {
+    int val;
+    do {
+        printf("%s (%d-%d) : ", message, min, max);
+        int result = scanf("%d", &val);
+        if (result != 1) {
+            printf("Entrée invalide. Veuillez saisir un entier.\n");
+            vider_buffer();
+            continue;
         }
-    }
-
-    return values;
+        vider_buffer();
+    } while (val < min || val > max);
+    return val;
 }
 
-int getCustomCardCount() {
-    return getValidatedInput("Nombre de cartes par joueur (4-12)", 4, 12);
-}
-
-int getRandomCardCount(int min, int max) {
-    printf("Génération aléatoire du nombre de cartes...\n");
-    return getRandomInt(min, max);
-}
-
-    switch (mode) {
-        case MODE_VALUE_FILE: {
-            int totalCards;
-            int* values = loadValuesFromFile("config.txt", &totalCards);
-            break;
-        }
-        case MODE_CARD_RAND:
-            int cardCount = getRandomCardCount(4, 10);
-            break;
-
-    }
+// Saisie sécurisée d'une chaîne de caractères
+void demander_chaine(const char* message, char* buffer, int taille_max) {
+    printf("%s : ", message);
+    fgets(buffer, taille_max, stdin);
+    buffer[strcspn(buffer, "\n")] = '\0'; // supprime le \n
 }
