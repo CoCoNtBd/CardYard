@@ -1,54 +1,56 @@
-void initialiserJeuCartes(Carte jeu[], int *taille) {
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "cards.h"
+
+// Crée une carte avec valeur et visibilité données
+Carte creer_carte(int valeur, int visible) {
+    Carte c;
+    c.valeur = valeur;
+    c.visible = visible;
+    return c;
+}
+
+// Mélange les cartes de la pioche
+void melanger_pioche(Carte* pioche, int taille) {
+    srand(time(NULL)); // Initialisation du générateur aléatoire
+    for (int i = 0; i < taille - 1; ++i) {
+        int j = i + rand() % (taille - i);
+        Carte temp = pioche[i];
+        pioche[i] = pioche[j];
+        pioche[j] = temp;
+    }
+}
+
+// Génère la pioche avec les valeurs et quantités par défaut
+Carte* generer_pioche_defaut(int* taille_pioche) {
+    int valeurs[]   = {-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    int quantites[] = { 5, 10,15,10,10,10,10,10,10,10,10,10,10,10,10};
+
+    int total = 0;
+    for (int i = 0; i < 15; ++i) total += quantites[i];
+
+    Carte* pioche = malloc(total * sizeof(Carte));
     int index = 0;
-    for (int i = 0; i < 5; i++) {
-        jeu[index].value = -2;
-        jeu[index].visible = 0; 
-        index++;
-    }
-    for (int i = 0; i < 10; i++) {
-        jeu[index].value = -1;
-        jeu[index].visible = 0;
-        index++;
-    }
-    *taille = index; 
-}
-void echangerCartes(Carte *cartePioche, Carte *cartePerso) {
-    Carte temp = *cartePioche;  
-    *cartePioche = *cartePerso; 
-    *cartePerso = temp;         
-    cartePerso->visible = 1;   
-void calculerScore(Joueur *j) {
-    j->score = 0; 
-    for (int i = 0; i < j->nbCartes; i++) {
-        j->score += j->cartesPersonnelles[i].value;
-    }
-}
-}
-int demander_valeur() {
-    int valeur;
 
-    printf("entrer une valeur : ");
-    scanf("%d", &valeur);
-    if (valeur != 1) {
-        printf( "Erreur\n");
+    for (int i = 0; i < 15; ++i) {
+        for (int j = 0; j < quantites[i]; ++j) {
+            pioche[index++] = creer_carte(valeurs[i], 0); // face cachée
+        }
     }
 
-    return valeur;
+    *taille_pioche = total;
+    return pioche;
 }
 
-void affiche_carte(int carte[]){
-    for(int i=0; i<nombre de carte; i++){
-    printf("[ %d ]", carte[i]);
-    }
+// Optionnel : à implémenter si variante VALUE_FILE
+Carte* charger_valeurs_depuis_fichier(const char* chemin, int* taille_pioche) {
+    // À écrire plus tard si tu veux charger depuis un fichier
+    return NULL;
 }
 
-void melangerCartes(int cartes[], int nombre de carte) {
-    for (int i = nombre de carte - 1; i > 0; i--) {
-        
-        int j = rand() % (i + 1);
-
-        Carte temp = cartes[i];
-        cartes[i] = cartes[j];
-        cartes[j] = temp;
-    }
+// Optionnel : à implémenter si variante VALUE_USER
+Carte* demander_valeurs_utilisateur(int* taille_pioche) {
+    // À écrire plus tard si tu veux demander les valeurs à l'utilisateur
+    return NULL;
 }
