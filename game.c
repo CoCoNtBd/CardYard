@@ -38,17 +38,16 @@ void distribuer_cartes(Jeu* jeu) {
     }
 }
 
-// Effectue un tour de jeu
 void jouer_tour(Jeu* jeu) {
     Joueur* joueur = &jeu->joueurs[jeu->tour_actuel];
     printf("\n--- Tour de %s ---\n", joueur->nom);
 
     afficher_plateau(jeu);
 
-    printf("Voulez-vous piocher (1) ou prendre une defausse (2) ? ");
+    printf("Voulez-vous piocher (1) ou prendre une défausse (2) ? ");
     int choix;
     scanf("%d", &choix);
-    vider_buffer(); // pour éviter les erreurs d'entrée
+    vider_buffer();
 
     Carte nouvelle;
 
@@ -64,13 +63,14 @@ void jouer_tour(Jeu* jeu) {
             printf("\n");
         }
     } else {
-        printf("Choisissez la défausse d'un joueur (0 à %d) : ", jeu->nb_joueurs - 1);
+        printf("Choisissez la défausse d'un joueur (1 à %d) : ", jeu->nb_joueurs);
         int cible;
         scanf("%d", &cible);
         vider_buffer();
+        cible -= 1;  // ✅ Convertir le numéro saisi (1 à N) en index (0 à N-1)
 
         if (cible < 0 || cible >= jeu->nb_joueurs) {
-            printf("Index de joueur invalide.\n");
+            printf("Numéro de joueur invalide.\n");
             return;
         }
 
@@ -83,16 +83,19 @@ void jouer_tour(Jeu* jeu) {
                 printf(" Et la pioche est aussi vide. Aucun échange possible ce tour.\n");
                 return;
             }
-            printf(" Pioche par défaut.\n");
             nouvelle = jeu->pioche[--jeu->nb_pioche];
             nouvelle.visible = 1;
+            printf(" Pioche par défaut : ");
+            afficher_carte(&nouvelle);
+            printf("\n");
         }
     }
 
-    printf("Quelle carte échanger ? (0 à %d) : ", joueur->nb_cartes - 1);
+    printf("Quelle carte échanger ? (1 à %d) : ", joueur->nb_cartes);
     int index;
     scanf("%d", &index);
     vider_buffer();
+    index -= 1;
 
     if (index < 0 || index >= joueur->nb_cartes) {
         printf("Index de carte invalide.\n");
@@ -111,7 +114,6 @@ void jouer_tour(Jeu* jeu) {
         printf("Erreur mémoire lors de la défausse.\n");
     }
 
-    // Tour suivant
     jeu->tour_actuel = (jeu->tour_actuel + 1) % jeu->nb_joueurs;
 }
 
