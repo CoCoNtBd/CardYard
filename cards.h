@@ -20,4 +20,3 @@ Carte* charger_valeurs_depuis_fichier(const char* chemin, int* taille_pioche);
 Carte* demander_valeurs_utilisateur(int* taille_pioche);
 
 #endif
-
