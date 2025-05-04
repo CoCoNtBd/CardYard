@@ -13,8 +13,11 @@ typedef struct {
     int nb_joueurs;
 
     int tour_actuel;       // Index du joueur dont c’est le tour
-    int jeu_termine;       // Booléen : 1 si le jeu est fini
+    int jeu_termine;  // Booléen : 1 si le jeu est fini
+    
+    int tours_restants;
 } Jeu;
+
 
 // Initialise une partie complète
 void initialiser_jeu(Jeu* jeu, int nb_joueurs, int nb_cartes_par_joueur);
@@ -32,4 +35,3 @@ int verifier_fin_partie(Jeu* jeu);
 void calculer_scores(const Jeu* jeu, int* scores);
 
 #endif
-
