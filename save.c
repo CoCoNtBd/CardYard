@@ -54,6 +54,7 @@ int charger_jeu(Jeu* jeu, const char* nom_fichier) {
 
     fscanf(f, "%d", &jeu->tour_actuel);
     jeu->jeu_termine = 0;
+    jeu->tours_restants = -1;
     fclose(f);
     return 1;
 }
