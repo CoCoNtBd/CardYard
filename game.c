@@ -23,6 +23,9 @@ void initialiser_jeu(Jeu* jeu, int nb_joueurs, int nb_cartes) {
     }
 
     distribuer_cartes(jeu);
+    jeu->tours_restants = -1; // -1 = aucun joueur n'a encore révélé toutes ses cartes
+    jeu->jeu_termine = 0;
+
 }
 
 // Distribution des cartes face cachée
@@ -45,51 +48,89 @@ void jouer_tour(Jeu* jeu) {
     printf("Voulez-vous piocher (1) ou prendre une defausse (2) ? ");
     int choix;
     scanf("%d", &choix);
+    vider_buffer(); // pour éviter les erreurs d'entrée
 
     Carte nouvelle;
+
     if (choix == 1) {
-        nouvelle = jeu->pioche[--jeu->nb_pioche];
-        nouvelle.visible = 1;
-        printf("Vous avez pioché : ");
-        afficher_carte(&nouvelle);
-        printf("\n");
+        if (jeu->nb_pioche == 0) {
+            printf("La pioche est vide ! Vous ne pouvez pas piocher.\n");
+            return;
+        } else {
+            nouvelle = jeu->pioche[--jeu->nb_pioche];
+            nouvelle.visible = 1;
+            printf("Vous avez pioché : ");
+            afficher_carte(&nouvelle);
+            printf("\n");
+        }
     } else {
-        printf("Choisissez la defausse d'un joueur (0-%d) : ", jeu->nb_joueurs - 1);
+        printf("Choisissez la défausse d'un joueur (0 à %d) : ", jeu->nb_joueurs - 1);
         int cible;
         scanf("%d", &cible);
+        vider_buffer();
+
+        if (cible < 0 || cible >= jeu->nb_joueurs) {
+            printf("Index de joueur invalide.\n");
+            return;
+        }
+
         if (jeu->joueurs[cible].nb_defausse > 0) {
             nouvelle = jeu->joueurs[cible].defausse[jeu->joueurs[cible].nb_defausse - 1];
             jeu->joueurs[cible].nb_defausse--;
         } else {
-            printf("Defausse vide, pioche par défaut.\n");
+            printf("Défausse vide.");
+            if (jeu->nb_pioche == 0) {
+                printf(" Et la pioche est aussi vide. Aucun échange possible ce tour.\n");
+                return;
+            }
+            printf(" Pioche par défaut.\n");
             nouvelle = jeu->pioche[--jeu->nb_pioche];
+            nouvelle.visible = 1;
         }
     }
 
-    printf("Quelle carte échanger ? (0-%d) : ", joueur->nb_cartes - 1);
+    printf("Quelle carte échanger ? (0 à %d) : ", joueur->nb_cartes - 1);
     int index;
     scanf("%d", &index);
+    vider_buffer();
+
+    if (index < 0 || index >= joueur->nb_cartes) {
+        printf("Index de carte invalide.\n");
+        return;
+    }
+
     Carte ancienne = joueur->cartes[index];
     joueur->cartes[index] = nouvelle;
     joueur->cartes[index].visible = 1;
 
-    joueur->defausse = realloc(joueur->defausse, sizeof(Carte) * (joueur->nb_defausse + 1));
-    joueur->defausse[joueur->nb_defausse++] = ancienne;
+    Carte* temp = realloc(joueur->defausse, sizeof(Carte) * (joueur->nb_defausse + 1));
+    if (temp != NULL) {
+        joueur->defausse = temp;
+        joueur->defausse[joueur->nb_defausse++] = ancienne;
+    } else {
+        printf("Erreur mémoire lors de la défausse.\n");
+    }
 
     // Tour suivant
     jeu->tour_actuel = (jeu->tour_actuel + 1) % jeu->nb_joueurs;
 }
 
+
 // Vérifie si un joueur a terminé (toutes cartes visibles)
 int verifier_fin_partie(Jeu* jeu) {
+    if (jeu->tours_restants != -1)
+        return 0; // Le dernier tour a déjà été déclenché
+
     for (int i = 0; i < jeu->nb_joueurs; ++i) {
         if (toutes_cartes_visibles(&jeu->joueurs[i])) {
-            jeu->jeu_termine = 1;
+            printf("\n%s a révélé toutes ses cartes ! Dernier tour pour les autres joueurs...\n", jeu->joueurs[i].nom);
+            jeu->tours_restants = jeu->nb_joueurs - 1;
             return 1;
         }
     }
     return 0;
 }
+
 
 // Calcule les scores en fin de partie
 void calculer_scores(const Jeu* jeu, int* scores) {
