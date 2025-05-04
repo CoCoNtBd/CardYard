@@ -9,9 +9,13 @@
 #define MAX_JOUEURS 4
 #define CARTES_PAR_JOUEUR 6
 
+typedef struct {
+    char nom[50];
+    int score;
+} Resultat;
+
 int main() {
     Jeu jeu;
-    int scores[MAX_JOUEURS];
     int choix;
 
     printf("Bienvenue dans CardYard !\n");
@@ -38,26 +42,67 @@ int main() {
 
     while (!jeu.jeu_termine) {
         jouer_tour(&jeu);
-        if (verifier_fin_partie(&jeu)) {
-            printf("\nLa partie est terminée !\n");
-            break;
+
+        verifier_fin_partie(&jeu); // Déclenche le mode "dernier tour" si besoin
+
+        if (jeu.tours_restants == 0) {
+            jeu.jeu_termine = 1;
+            printf("\nLa partie est terminée après le dernier tour !\n");
+        } else if (jeu.tours_restants > 0) {
+            jeu.tours_restants--;
         }
 
-        printf("\nSouhaitez-vous sauvegarder ? (1=Oui / 0=Non) : ");
-        int save = demander_entier("", 0, 1);
-        if (save) {
-            char fichier[50];
-            demander_chaine("Nom du fichier de sauvegarde", fichier, 50);
-            if (sauvegarder_jeu(&jeu, fichier)) {
-                printf("Sauvegarde réussie !\n");
-            } else {
-                printf("Echec de la sauvegarde.\n");
+        // Demander si le joueur veut quitter
+        printf("\nSouhaitez-vous quitter la partie ? (1=Oui / 0=Non) : ");
+        int quitter = demander_entier("", 0, 1);
+        if (quitter) {
+            printf("Souhaitez-vous sauvegarder avant de quitter ? (1=Oui / 0=Non) : ");
+            int save = demander_entier("", 0, 1);
+            if (save) {
+                char fichier[50];
+                demander_chaine("Nom du fichier de sauvegarde", fichier, 50);
+                if (sauvegarder_jeu(&jeu, fichier)) {
+                    printf("Sauvegarde réussie !\n");
+                } else {
+                    printf("Échec de la sauvegarde.\n");
+                }
             }
+            printf("Vous avez quitté la partie.\n");
+            return 0;
         }
     }
 
-    calculer_scores(&jeu, scores);
-    afficher_scores(&jeu, scores);
 
-    return 0;
+
+Resultat scores[MAX_JOUEURS];
+
+// Calcul des scores
+for (int i = 0; i < jeu.nb_joueurs; ++i) {
+    scores[i].score = 0;
+    strcpy(scores[i].nom, jeu.joueurs[i].nom);
+    for (int j = 0; j < jeu.joueurs[i].nb_cartes; ++j) {
+        scores[i].score += jeu.joueurs[i].cartes[j].valeur;
+    }
+}
+
+// Tri des scores par ordre croissant
+for (int i = 0; i < jeu.nb_joueurs - 1; ++i) {
+    for (int j = i + 1; j < jeu.nb_joueurs; ++j) {
+        if (scores[j].score < scores[i].score) {
+            Resultat tmp = scores[i];
+            scores[i] = scores[j];
+            scores[j] = tmp;
+        }
+    }
+}
+
+// Affichage final
+printf("\n--- Résultat final ---\n");
+for (int i = 0; i < jeu.nb_joueurs; ++i) {
+    printf("%s : %d point%s\n", scores[i].nom, scores[i].score, scores[i].score > 1 ? "s" : "");
+}
+
+printf("\n🎉 Le gagnant est : %s avec %d points ! 🎉\n", scores[0].nom, scores[0].score);
+
+return 0;
 }
