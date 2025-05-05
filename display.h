@@ -14,7 +14,7 @@ void afficher_plateau(const Jeu* jeu);
 // affiche les scores a la fin de la partie
 void afficher_scores(const Jeu* jeu, const int* scores);
 
-// (Facultatif mais utile pour debug ou affichage individuel)
+// Debug ou affichage individuel
 void afficher_joueur(const Joueur* joueur);
 void afficher_defausse(const Carte* defausse, int taille);
 void afficher_pioche(const Carte* pioche, int taille);
