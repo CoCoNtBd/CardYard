@@ -8,10 +8,8 @@ typedef struct {
 
 // creation, manipulation des carte
 Carte creer_carte(int valeur, int visible);
-
 // Mélange de la pioche
 void melanger_pioche(Carte* pioche, int taille);
-
 // generation de la pioche avec les valeurs par defaut
 Carte* generer_pioche_defaut(int* taille_pioche);
 
