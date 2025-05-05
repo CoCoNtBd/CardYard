@@ -14,7 +14,6 @@ void afficher_carte(const Carte* carte) {
 
 void afficher_plateau(const Jeu* jeu) {
     printf("\n============================== PLATEAU DE JEU ==============================\n\n");
-
     // Cartes et défausse associées à chaque joueur
     for (int i = 0; i < jeu->nb_joueurs; ++i) {
         Joueur* joueur = &jeu->joueurs[i];
@@ -23,7 +22,6 @@ void afficher_plateau(const Jeu* jeu) {
             afficher_carte(&joueur->cartes[j]);
             printf(" ");
         }
-
         // Affichage de la défausse du joueur
         printf("   Défausse : ");
         if (joueur->nb_defausse > 0) {
@@ -34,7 +32,6 @@ void afficher_plateau(const Jeu* jeu) {
         }
         printf("\n");
     }
-
     // Pioche centrale
     printf("\nPioche centrale : ");
     if (jeu->nb_pioche > 0) {
@@ -42,7 +39,6 @@ void afficher_plateau(const Jeu* jeu) {
     } else {
         printf("[ Vide ]\n");
     }
-
     // Tour actuel
     printf("Tour actuel : Joueur %d (%s)\n", jeu->tour_actuel + 1, jeu->joueurs[jeu->tour_actuel].nom);
     printf("============================================================================\n");
@@ -57,7 +53,7 @@ void afficher_scores(const Jeu* jeu, const int* scores) {
     }
 }
 
-// Facultatif : affichage individuel d’un joueur
+// affichage individuel d’un joueur
 void afficher_joueur(const Joueur* joueur) {
     printf("Joueur : %s\n", joueur->nom);
     printf("Cartes : ");
@@ -66,7 +62,6 @@ void afficher_joueur(const Joueur* joueur) {
         printf(" ");
     }
     printf("\n");
-
     printf("Défausse : ");
     if (joueur->nb_defausse > 0) {
         Carte top = joueur->defausse[joueur->nb_defausse - 1];
