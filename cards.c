@@ -13,8 +13,8 @@ Carte creer_carte(int valeur, int visible) {
 
 // melange des cartes de la pioche
 void melanger_pioche(Carte* pioche, int taille) {
-    srand(time(NULL)); // Initialisation du générateur aléatoire
-    for (int i = 0; i < taille - 1; ++i) {
+    srand(time(NULL)); 
+    for (int i = 0; i < taille - 1; i++) {
         int j = i + rand() % (taille - i);
         Carte temp = pioche[i];
         pioche[i] = pioche[j];
@@ -28,13 +28,13 @@ Carte* generer_pioche_defaut(int* taille_pioche) {
     int quantites[] = { 5, 10,15,10,10,10,10,10,10,10,10,10,10,10,10};
 
     int total = 0;
-    for (int i = 0; i < 15; ++i) total += quantites[i];
+    for (int i = 0; i < 15; i++) total += quantites[i];
 
     Carte* pioche = malloc(total * sizeof(Carte));
     int index = 0;
 
-    for (int i = 0; i < 15; ++i) {
-        for (int j = 0; j < quantites[i]; ++j) {
+    for (int i = 0; i < 15; i++) {
+        for (int j = 0; j < quantites[i]; j++) {
             pioche[index++] = creer_carte(valeurs[i], 0); // face cachée
         }
     }
