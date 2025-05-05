@@ -1,35 +1,38 @@
-# Nom de l'exécutable
+# Nom de l'exécutable final
 EXEC = cardyard
 
-# Tous les fichiers source du projet
-SRC = main.c \
-      game.c \
-      player.c \
-      cards.c \
-      display.c \
-      save.c \
-      utils.c
+# Liste des fichiers sources
+SRC = main.c game.c cards.c player.c save.c display.c utils.c
 
-# Fichiers objets générés (.o)
+# Liste des headers (pour les dépendances)
+HEADERS = game.h cards.h player.h save.h display.h utils.h
+
+# Compilation
+CC = gcc
+CFLAGS = -Wall -Wextra -g
+
+# Object files
 OBJ = $(SRC:.c=.o)
 
-# Options du compilateur
-CFLAGS = -Wall -Wextra -std=c99
-
-# Compilateur
-CC = gcc
-
-# Règle par défaut : compilation complète
+# Règle par défaut
 all: $(EXEC)
 
-# Création de l'exécutable à partir des fichiers objets
+# Lier les objets
 $(EXEC): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
-# Supprimer les fichiers objets uniquement
-clean:
-	rm -f *.o
+# Compilation de chaque fichier .c en .o
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# Supprimer les objets ET l'exécutable
+# Nettoyer les fichiers compilés
+clean:
+	rm -f *.o $(EXEC)
+
+# Nettoyage + suppression de sauvegardes éventuelles
 mrproper: clean
-	rm -f $(EXEC)
+	rm -f *~ *.bak
+
+# Exécution rapide
+run: $(EXEC)
+	./$(EXEC)
