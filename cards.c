@@ -28,14 +28,17 @@ Carte* generer_pioche_defaut(int* taille_pioche) {
     int quantites[] = { 5, 10,15,10,10,10,10,10,10,10,10,10,10,10,10};
 
     int total = 0;
-    for (int i = 0; i < 15; i++) total += quantites[i];
+    for (int i = 0; i < 15; i++){
+        total += quantites[i];
+    }
 
     Carte* pioche = malloc(total * sizeof(Carte));
     int index = 0;
 
     for (int i = 0; i < 15; i++) {
         for (int j = 0; j < quantites[i]; j++) {
-            pioche[index++] = creer_carte(valeurs[i], 0); // face cachée
+            pioche[index] = creer_carte(valeurs[i], 0); // carte face caché
+            index++;
         }
     }
 
