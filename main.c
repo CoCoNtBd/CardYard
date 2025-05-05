@@ -17,14 +17,11 @@ typedef struct {
 int main() {
     Jeu jeu;
     int choix;
-
     printf("Bienvenue dans CardYard !\n");
     printf("1. Nouvelle partie\n");
     printf("2. Charger une partie\n");
     printf("3. Quitter\n");
-
     choix = demander_entier("Choix", 1, 3);
-
     if (choix == 3) {
         printf("Au revoir !\n");
         return 0;
@@ -39,19 +36,15 @@ int main() {
         int nb_joueurs = demander_entier("Nombre de joueurs", 2, MAX_JOUEURS);
         initialiser_jeu(&jeu, nb_joueurs, CARTES_PAR_JOUEUR);
     }
-
     while (!jeu.jeu_termine) {
         jouer_tour(&jeu);
-
         verifier_fin_partie(&jeu); // Déclenche le mode "dernier tour" si besoin
-
         if (jeu.tours_restants == 0) {
             jeu.jeu_termine = 1;
             printf("\nLa partie est terminée après le dernier tour !\n");
         } else if (jeu.tours_restants > 0) {
             jeu.tours_restants--;
         }
-
         // Demander si le joueur veut quitter
         printf("\nSouhaitez-vous quitter la partie ? (1=Oui / 0=Non) : ");
         int quitter = demander_entier("", 0, 1);
@@ -84,7 +77,6 @@ for (int i = 0; i < jeu.nb_joueurs; ++i) {
         scores[i].score += jeu.joueurs[i].cartes[j].valeur;
     }
 }
-
 // Tri des scores par ordre croissant
 for (int i = 0; i < jeu.nb_joueurs - 1; ++i) {
     for (int j = i + 1; j < jeu.nb_joueurs; ++j) {
@@ -95,14 +87,11 @@ for (int i = 0; i < jeu.nb_joueurs - 1; ++i) {
         }
     }
 }
-
 // Affichage final
 printf("\n--- Résultat final ---\n");
 for (int i = 0; i < jeu.nb_joueurs; ++i) {
     printf("%s : %d point%s\n", scores[i].nom, scores[i].score, scores[i].score > 1 ? "s" : "");
 }
-
 printf("\n🎉 Le gagnant est : %s avec %d points ! 🎉\n", scores[0].nom, scores[0].score);
-
 return 0;
 }
