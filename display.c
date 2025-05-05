@@ -12,40 +12,29 @@ void afficher_carte(const Carte* carte) {
 }
 
 void afficher_plateau(const Jeu* jeu) {
-    printf("\n============== PLATEAU DE JEU ==============\n\n");
+    printf("\n============================== PLATEAU DE JEU ==============================\n\n");
 
-    // Noms des joueurs
-    printf("JOUEURS    :   ");
+    // Cartes et défausse associées à chaque joueur
     for (int i = 0; i < jeu->nb_joueurs; ++i) {
-        printf("%-*s", ecart, jeu->joueurs[i].nom);
-    }
-    printf("\n");
+        Joueur* joueur = &jeu->joueurs[i];
+        printf("%-10s : ", joueur->nom);
+        for (int j = 0; j < joueur->nb_cartes; ++j) {
+            afficher_carte(&joueur->cartes[j]);
+            printf(" ");
+        }
 
-    // Cartes personnelles (en ligne)
-    int nb_cartes = jeu->joueurs[0].nb_cartes;
-    for (int ligne = 0; ligne < nb_cartes; ++ligne) {
-        printf("Carte %-5d:   ", ligne + 1);
-        for (int j = 0; j < jeu->nb_joueurs; ++j) {
-            afficher_carte(&jeu->joueurs[j].cartes[ligne]);
-            printf("%*s", ecart - 7, "");
+        // Affichage de la défausse du joueur
+        printf("   Défausse : ");
+        if (joueur->nb_defausse > 0) {
+            Carte top = joueur->defausse[joueur->nb_defausse - 1];
+            printf("[ %2d ]", top.valeur);
+        } else {
+            printf("[    ]");
         }
         printf("\n");
     }
 
-    // Défausses
-    printf("Défausse   :   ");
-    for (int i = 0; i < jeu->nb_joueurs; ++i) {
-        Joueur* j = &jeu->joueurs[i];
-        if (j->nb_defausse > 0) {
-            Carte top = j->defausse[j->nb_defausse - 1];
-            printf("[ %2d ]%*s", top.valeur, ecart - 7, "");
-        } else {
-            printf("[    ]%*s", ecart - 7, "");
-        }
-    }
-    printf("\n");
-
-    // Pioche
+    // Pioche centrale
     printf("\nPioche centrale : ");
     if (jeu->nb_pioche > 0) {
         printf("[ ? ] (%d carte%s)\n", jeu->nb_pioche, jeu->nb_pioche > 1 ? "s" : "");
@@ -55,8 +44,10 @@ void afficher_plateau(const Jeu* jeu) {
 
     // Tour actuel
     printf("Tour actuel : Joueur %d (%s)\n", jeu->tour_actuel + 1, jeu->joueurs[jeu->tour_actuel].nom);
-    printf("============================================\n");
+    printf("============================================================================\n");
 }
+
+
 
 void afficher_scores(const Jeu* jeu, const int* scores) {
     printf("\n--- Scores des joueurs ---\n");
