@@ -3,7 +3,7 @@
 #include <time.h>
 #include "cards.h"
 
-// Crée une carte avec valeur et visibilité données
+// creer carte avec valeur et visibilité
 Carte creer_carte(int valeur, int visible) {
     Carte c;
     c.valeur = valeur;
@@ -11,7 +11,7 @@ Carte creer_carte(int valeur, int visible) {
     return c;
 }
 
-// Mélange les cartes de la pioche
+// melange des cartes de la pioche
 void melanger_pioche(Carte* pioche, int taille) {
     srand(time(NULL)); // Initialisation du générateur aléatoire
     for (int i = 0; i < taille - 1; ++i) {
@@ -22,7 +22,7 @@ void melanger_pioche(Carte* pioche, int taille) {
     }
 }
 
-// Génère la pioche avec les valeurs et quantités par défaut
+// generation de la pioche avec les valeur et le nombre de carte par valeur
 Carte* generer_pioche_defaut(int* taille_pioche) {
     int valeurs[]   = {-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     int quantites[] = { 5, 10,15,10,10,10,10,10,10,10,10,10,10,10,10};
@@ -41,16 +41,4 @@ Carte* generer_pioche_defaut(int* taille_pioche) {
 
     *taille_pioche = total;
     return pioche;
-}
-
-// Optionnel : à implémenter si variante VALUE_FILE
-Carte* charger_valeurs_depuis_fichier(const char* chemin, int* taille_pioche) {
-    // À écrire plus tard si tu veux charger depuis un fichier
-    return NULL;
-}
-
-// Optionnel : à implémenter si variante VALUE_USER
-Carte* demander_valeurs_utilisateur(int* taille_pioche) {
-    // À écrire plus tard si tu veux demander les valeurs à l'utilisateur
-    return NULL;
 }
