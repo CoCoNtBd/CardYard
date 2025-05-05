@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "display.h"
 
-#define ecart 12 // Largeur fixe pour aligner les colonnes
+ // largeur pour les ecart en colonne
+#define ecart 12
 
 void afficher_carte(const Carte* carte) {
     if (carte->visible) {
