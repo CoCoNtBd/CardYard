@@ -3,20 +3,16 @@
 
 typedef struct {
     int valeur;
-    int visible; // 0 = face cachée, 1 = visible
+    int visible; // 0 = carte face caché, 1 = carte visible
 } Carte;
 
-// Création et manipulation de cartes
+// creation, manipulation des carte
 Carte creer_carte(int valeur, int visible);
 
-// Mélange aléatoire d'une pioche
+// Mélange de la pioche
 void melanger_pioche(Carte* pioche, int taille);
 
-// Génération de la pioche selon les valeurs par défaut
+// generation de la pioche avec les valeurs par defaut
 Carte* generer_pioche_defaut(int* taille_pioche);
-
-// (Facultatif, pour les variantes)
-Carte* charger_valeurs_depuis_fichier(const char* chemin, int* taille_pioche);
-Carte* demander_valeurs_utilisateur(int* taille_pioche);
 
 #endif
