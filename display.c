@@ -38,7 +38,7 @@ void afficher_plateau(const Jeu* jeu) {
     // pioche centrale
     printf("\nPioche centrale : ");
     if (jeu->nb_pioche > 0) {
-        printf("[ ? ] (%d carte\n", jeu->nb_pioche);
+        printf("[ ? ] (%d carte", jeu->nb_pioche);
         if(jeu->nb_pioche>1){
             printf("s)\n");
         }
