@@ -3,7 +3,7 @@
 #include <string.h>
 #include "utils.h"
 
-// Efface le tampon d'entrée
+// efface tampon d'entrée
 void vider_buffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
