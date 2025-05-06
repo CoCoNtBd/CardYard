@@ -5,18 +5,13 @@
 #include "player.h"
 #include "cards.h"
 
-// Affiche une carte
+// Affiche une carte individuelle
 void afficher_carte(const Carte* carte);
 
-// Affiche le plateau de jeu avec les joueurs les artes la defausse et lz pioche
+// Affiche tout le plateau de jeu (joueurs + cartes + défausse + pioche)
 void afficher_plateau(const Jeu* jeu);
 
-// affiche les scores a la fin de la partie
+// Affiche les scores de fin de partie
 void afficher_scores(const Jeu* jeu, const int* scores);
-
-// Debug ou affichage individuel
-void afficher_joueur(const Joueur* joueur);
-void afficher_defausse(const Carte* defausse, int taille);
-void afficher_pioche(const Carte* pioche, int taille);
 
 #endif
