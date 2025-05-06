@@ -9,7 +9,7 @@ void initialiser_joueur(Joueur* joueur, int nb_cartes) {
     joueur->nb_cartes = nb_cartes;
     joueur->cartes = malloc(nb_cartes * sizeof(Carte));
     joueur->nb_defausse = 0;
-    joueur->defausse = NULL;
+    joueur->defausse = malloc(MAX_DEFAUSSE * sizeof(Carte));;
 }
 
 // Vérifie si toutes les cartes du joueur sont visibles
@@ -23,8 +23,11 @@ int toutes_cartes_visibles(const Joueur* joueur) {
 
 // Ajoute une carte dans la défausse du joueur
 void ajouter_a_defausse(Joueur* joueur, Carte c) {
-    joueur->defausse = realloc(joueur->defausse, sizeof(Carte) * (joueur->nb_defausse + 1));
-    joueur->defausse[joueur->nb_defausse++] = c;
+    if (joueur->nb_defausse < MAX_DEFAUSSE) {
+        joueur->defausse[joueur->nb_defausse++] = c;
+    } else {
+        printf("Erreur : la défausse de %s est pleine !\n", joueur->nom);
+    }
 }
 
 // Échange une carte du joueur avec une nouvelle carte (indexé)
