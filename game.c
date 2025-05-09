@@ -18,14 +18,14 @@ void initialiser_jeu(Jeu* jeu, int nb_joueurs, int nb_cartes) {
     jeu->joueurs = malloc(nb_joueurs * sizeof(Joueur));
     for (int i = 0; i < nb_joueurs; i++) {
         printf("Nom du joueur %d : ", i + 1);
-        scanf("%s", jeu->joueurs[i].nom);
+        scanf("%49s", jeu->joueurs[i].nom);
+        while (getchar() != '\n');
         initialiser_joueur(&jeu->joueurs[i], nb_cartes);
     }
 
     distribuer_cartes(jeu);
-    jeu->tours_restants = -1; // -1 signifie qu'aucun joueur n'a encore révélé toutes ses cartes
+    jeu->tours_restants = -1;
     jeu->jeu_termine = 0;
-
 }
 
 // distribution des cartes face cachée
@@ -44,10 +44,11 @@ void jouer_tour(Jeu* jeu) {
 
     afficher_plateau(jeu);
 
-    printf("Voulez-vous piocher (1) ou prendre une défausse (2) ? ");
     int choix;
-    scanf("%d", &choix);
-    vider_buffer();
+    do {
+        printf("Voulez-vous piocher (1) ou prendre une défausse (2) ? ");
+        choix = demander_entier_secure("", 1, 2);
+    } while (choix != 1 && choix != 2);
 
     Carte nouvelle;
 
@@ -58,21 +59,12 @@ void jouer_tour(Jeu* jeu) {
         } else {
             nouvelle = jeu->pioche[--jeu->nb_pioche];
             nouvelle.visible = 1;
-            printf("Vous avez pioché : ");
-            afficher_carte(&nouvelle);
-            printf("\n");
+            printf("Vous avez pioché : \n");
+            afficher_cartes_en_ligne(&nouvelle, 1, NULL);
         }
     } else {
         printf("Choisissez la défausse d'un joueur (1 à %d) : ", jeu->nb_joueurs);
-        int cible;
-        scanf("%d", &cible);
-        vider_buffer();
-        cible -= 1;
-
-        if (cible < 0 || cible >= jeu->nb_joueurs) {
-            printf("Numéro de joueur invalide.\n");
-            return;
-        }
+        int cible = demander_entier_secure("", 1, jeu->nb_joueurs) - 1;
 
         if (jeu->joueurs[cible].nb_defausse > 0) {
             nouvelle = jeu->joueurs[cible].defausse[jeu->joueurs[cible].nb_defausse - 1];
@@ -86,43 +78,30 @@ void jouer_tour(Jeu* jeu) {
             nouvelle = jeu->pioche[--jeu->nb_pioche];
             nouvelle.visible = 1;
             printf(" Pioche par défaut : ");
-            afficher_carte(&nouvelle);
-            printf("\n");
+            afficher_cartes_en_ligne(&nouvelle, 1, NULL);
         }
     }
 
     printf("Quelle carte échanger ? (1 à %d) : ", joueur->nb_cartes);
-    int index;
-    scanf("%d", &index);
-    vider_buffer();
-    index -= 1;
-
-    if (index < 0 || index >= joueur->nb_cartes) {
-        printf("Carte invalide.\n");
-        return;
-    }
+    int index = demander_entier_secure("", 1, joueur->nb_cartes) - 1;
 
     Carte ancienne = joueur->cartes[index];
     joueur->cartes[index] = nouvelle;
     joueur->cartes[index].visible = 1;
 
-    // Ajouter l'ancienne carte à la défausse (sans realloc)
     if (joueur->nb_defausse < MAX_DEFAUSSE) {
         joueur->defausse[joueur->nb_defausse++] = ancienne;
     } else {
         printf("Erreur : la défausse est pleine !\n");
     }
 
-    // Tour suivant
     jeu->tour_actuel = (jeu->tour_actuel + 1) % jeu->nb_joueurs;
 }
 
-
-
-// Vérifie si un joueur a terminé et que toute ses carte sont visible
+// Vérifie si un joueur a terminé et que toutes ses cartes sont visibles
 int verifier_fin_partie(Jeu* jeu) {
     if (jeu->tours_restants != -1)
-        return 0; // Le dernier tour a déjà été déclenché
+        return 0;
 
     for (int i = 0; i < jeu->nb_joueurs; i++) {
         if (toutes_cartes_visibles(&jeu->joueurs[i])) {
@@ -134,7 +113,6 @@ int verifier_fin_partie(Jeu* jeu) {
     return 0;
 }
 
-
 // Calcule les scores en fin de partie
 void calculer_scores(const Jeu* jeu, int* scores) {
     for (int i = 0; i < jeu->nb_joueurs; i++) {
@@ -145,31 +123,25 @@ void calculer_scores(const Jeu* jeu, int* scores) {
     }
 }
 
-// liberation de la memoire pour eviter les crash
+// Libération de la mémoire
 void liberer_jeu(Jeu* jeu) {
     for (int i = 0; i < jeu->nb_joueurs; ++i) {
         Joueur* joueur = &jeu->joueurs[i];
-
-        // Libérer les cartes
         if (joueur->cartes != NULL) {
             free(joueur->cartes);
             joueur->cartes = NULL;
         }
-
-        // Libérer la défausse
         if (joueur->defausse != NULL) {
             free(joueur->defausse);
             joueur->defausse = NULL;
         }
     }
 
-    // Libérer le tableau des joueurs
     if (jeu->joueurs != NULL) {
         free(jeu->joueurs);
         jeu->joueurs = NULL;
     }
 
-    // Libérer la pioche
     if (jeu->pioche != NULL) {
         free(jeu->pioche);
         jeu->pioche = NULL;
