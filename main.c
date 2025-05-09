@@ -49,7 +49,7 @@ int main() {
         // Choix des valeurs de cartes
         printf("\nChoisissez les valeurs de carte :\n");
         printf("1. Utiliser les valeurs par défaut\n");
-        printf("2. Définir manuellement les valeurs (VALUE_USER)\n");
+        printf("2. Définir manuellement les valeurs \n");
         int choix_valeurs = demander_entier_secure("Choix", 1, 2);
 
         jeu.nb_joueurs = nb_joueurs;
