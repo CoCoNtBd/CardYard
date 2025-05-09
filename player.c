@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,7 +10,7 @@ void initialiser_joueur(Joueur* joueur, int nb_cartes) {
     joueur->nb_cartes = nb_cartes;
     joueur->cartes = malloc(nb_cartes * sizeof(Carte));
     joueur->nb_defausse = 0;
-    joueur->defausse = malloc(MAX_DEFAUSSE * sizeof(Carte));;
+    joueur->defausse = malloc(MAX_DEFAUSSE * sizeof(Carte));
 }
 
 // Vérifie si toutes les cartes du joueur sont visibles
@@ -21,16 +22,17 @@ int toutes_cartes_visibles(const Joueur* joueur) {
     return 1;
 }
 
-// Ajoute une carte dans la défausse du joueur
+// Ajoute une carte dans la défausse du joueur (toujours face visible)
 void ajouter_a_defausse(Joueur* joueur, Carte c) {
     if (joueur->nb_defausse < MAX_DEFAUSSE) {
+        c.visible = 1;  // ✅ Important : les cartes dans la défausse doivent être visibles
         joueur->defausse[joueur->nb_defausse++] = c;
     } else {
         printf("Erreur : la défausse de %s est pleine !\n", joueur->nom);
     }
 }
 
-// Échange une carte du joueur avec une nouvelle carte (indexé)
+// Échange une carte du joueur avec une nouvelle carte à un index donné
 void echanger_carte(Joueur* joueur, Carte nouvelle, int index_carte) {
     Carte ancienne = joueur->cartes[index_carte];
     joueur->cartes[index_carte] = nouvelle;
