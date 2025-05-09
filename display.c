@@ -100,4 +100,3 @@ void afficher_scores(const Jeu* jeu, const int* scores) {
         printf("%s : %d point%s\n", jeu->joueurs[i].nom, scores[i], scores[i] > 1 ? "s" : "");
     }
 }
-
