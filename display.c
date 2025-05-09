@@ -24,9 +24,9 @@ void afficher_cartes_en_ligne(const Carte* cartes, int nb_cartes, const Carte* d
             if (!c->visible) {
                 switch (ligne_index) {
                     case 0: printf("╔══════╗ "); break;
-                    case 1: printf("║CARD  ║ "); break;
+                    case 1: printf("║ CARD ║ "); break;
                     case 2: printf("║~~~~~~║ "); break;
-                    case 3: printf("║YARD  ║ "); break;
+                    case 3: printf("║ YARD ║ "); break;
                     case 4: printf("╚══════╝ "); break;
                 }
                 continue;
