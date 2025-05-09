@@ -77,7 +77,7 @@ void jouer_tour(Jeu* jeu) {
             }
             nouvelle = jeu->pioche[--jeu->nb_pioche];
             nouvelle.visible = 1;
-            printf(" Pioche par défaut : ");
+            printf(" Pioche par défaut : \n");
             afficher_cartes_en_ligne(&nouvelle, 1, NULL);
         }
     }
