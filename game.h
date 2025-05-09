@@ -4,38 +4,38 @@
 #include "cards.h"
 #include "player.h"
 
-// structure principal du jeu
+// Structure principale représentant l'état d'une partie
 typedef struct {
-    Carte* pioche;         // Pioche centrale
-    int nb_pioche;
+    Carte* pioche;       // Pioche centrale du jeu (tableau dynamique)
+    int nb_pioche;       // Nombre de cartes restantes dans la pioche
 
-    Joueur* joueurs;       // Tableau de joueurs
-    int nb_joueurs;
+    Joueur* joueurs;     // Tableau dynamique des joueurs
+    int nb_joueurs;      // Nombre de joueurs dans la partie
 
-    int tour_actuel;       // Index du joueur dont c’est le tour
-    int jeu_termine;  // Booléen : 1 si le jeu est fini
-    
-    int tours_restants;
+    int tour_actuel;     // Index du joueur dont c’est le tour (0 à nb_joueurs - 1)
+    int jeu_termine;     // Booléen : 1 si la partie est terminée, 0 sinon
+
+    int tours_restants;  // Déclenché à -1 (non actif), puis décrémenté à la fin
+                         // quand un joueur a révélé toutes ses cartes
 } Jeu;
 
-
-// Initialise la partie
+// Initialise la partie (pioche, mélange, joueurs, distribution des cartes)
 void initialiser_jeu(Jeu* jeu, int nb_joueurs, int nb_cartes_par_joueur);
 
-// Distribue les cartes de la pioche à chaque joueur
+// Distribue les cartes de la pioche à chaque joueur (face cachée)
 void distribuer_cartes(Jeu* jeu);
 
-// Joue un tour complet pour le joueur courant
+// Exécute un tour de jeu pour le joueur courant
 void jouer_tour(Jeu* jeu);
 
-// Vérifie si la partie est terminée (un joueur a toutes ses cartes visibles)
+// Vérifie si un joueur a terminé (toutes ses cartes sont visibles)
+// Déclenche les tours restants pour les autres joueurs
 int verifier_fin_partie(Jeu* jeu);
 
-// Calcule les scores finaux et les stocke dans un tableau externe
+// Calcule le score de chaque joueur en sommant les valeurs de ses cartes
 void calculer_scores(const Jeu* jeu, int* scores);
 
-//liberation de la memoire pour evité les crash
+// Libère toute la mémoire dynamique utilisée par la partie
 void liberer_jeu(Jeu* jeu);
-
 
 #endif
