@@ -1,9 +1,3 @@
-#ifndef GAME_H
-#define GAME_H
-
-#include "cards.h"
-#include "player.h"
-
 // structure principal du jeu
 typedef struct {
     Carte* pioche;         // Pioche centrale
