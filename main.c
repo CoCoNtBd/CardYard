@@ -107,6 +107,9 @@ int main() {
         }
     }
 
+    // Afficher une dernière fois le plateau avant les scores finaux
+    afficher_plateau(&jeu);
+
     Resultat scores[MAX_JOUEURS];
     for (int i = 0; i < jeu.nb_joueurs; i++) {
         scores[i].score = 0;
@@ -116,6 +119,7 @@ int main() {
         }
     }
 
+    // Trier les scores par ordre croissant
     for (int i = 0; i < jeu.nb_joueurs - 1; i++) {
         for (int j = i + 1; j < jeu.nb_joueurs; j++) {
             if (scores[j].score < scores[i].score) {
@@ -126,12 +130,14 @@ int main() {
         }
     }
 
+    // Affichage des scores
     for (int i = 0; i < jeu.nb_joueurs; i++) {
         printf("%s : %d point", scores[i].nom, scores[i].score);
         if (scores[i].score > 1) printf("s");
         printf("\n");
     }
 
+    // Affichage du gagnant
     printf("\n🎉 Le gagnant est : %s avec %d points ! 🎉\n", scores[0].nom, scores[0].score);
     liberer_jeu(&jeu);
     return 0;
