@@ -25,6 +25,20 @@ int demander_entier(const char* message, int min, int max) {
     return val;
 }
 
+// Saisie sécurisée d'un entier (version sécurisée globale)
+int demander_entier_secure(const char* message, int min, int max) {
+    int val, result;
+    do {
+        printf("%s (%d-%d) : ", message, min, max);
+        result = scanf("%d", &val);
+        while (getchar() != '\n'); // Vider le buffer
+        if (result != 1 || val < min || val > max) {
+            printf("Entrée invalide. Veuillez recommencer.\n");
+        }
+    } while (result != 1 || val < min || val > max);
+    return val;
+}
+
 // Saisie sécurisée d'une chaîne de caractères
 void demander_chaine(const char* message, char* buffer, int taille_max) {
     printf("%s : ", message);
