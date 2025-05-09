@@ -8,6 +8,9 @@ void vider_buffer();
 // Affiche un message d'invite
 int demander_entier(const char* message, int min, int max);
 
+int demander_entier_secure(const char* message, int min, int max);
+
+
 // Demande une chaîne de caractères à l'utilisateur
 // Le résultat est stocké dans `buffer` (de taille `taille_max`)
 void demander_chaine(const char* message, char* buffer, int taille_max);
