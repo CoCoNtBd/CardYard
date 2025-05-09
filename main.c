@@ -8,20 +8,22 @@
 #include "utils.h"
 #include "cards.h"
 
-#define MAX_JOUEURS 4
-#define NB_CARTES_TOTAL 150
+#define MAX_JOUEURS 4          // Limite de joueurs maximum
+#define NB_CARTES_TOTAL 150    // Taille maximale totale de la pioche (non utilisée directement ici)
 
+// Structure pour stocker les résultats finaux (nom + score)
 typedef struct {
     char nom[50];
     int score;
 } Resultat;
 
 int main() {
-    Jeu jeu;
+    Jeu jeu;      // Structure principale contenant tout l'état du jeu
     int choix;
 
-    srand(time(NULL)); // Initialisation unique pour l'aléatoire
+    srand(time(NULL)); // Initialisation de l'aléatoire pour le mélange des cartes
 
+    // Menu principal
     printf("Bienvenue dans CardYard !\n");
     printf("1. Nouvelle partie\n");
     printf("2. Charger une partie\n");
@@ -32,27 +34,31 @@ int main() {
     if (choix == 3) {
         printf("Au revoir !\n");
         return 0;
-    } else if (choix == 2) {
+    }
+    else if (choix == 2) {
+        // Chargement d'une sauvegarde
         char fichier[50];
         demander_chaine("Nom du fichier de sauvegarde", fichier, 50);
         if (!charger_jeu(&jeu, fichier)) {
             printf("\nErreur de chargement. Retour au menu.\n");
             return 1;
         }
-    } else {
+    }
+    else {
+        // Création d'une nouvelle partie
         int nb_joueurs = demander_entier_secure("Nombre de joueurs", 2, MAX_JOUEURS);
 
-        // Nombre de cartes personnelles aléatoire pour tous (CARD_RAND)
-        int nb_cartes_par_joueur = (rand() % 7) + 4; // entre 4 et 10
-        printf("\n");
-        printf("Nombre de cartes personnelles aléatoire choisi pour tous les joueurs : %d\n", nb_cartes_par_joueur);
+        // Nombre de cartes aléatoire entre 4 et 10 pour chaque joueur
+        int nb_cartes_par_joueur = (rand() % 7) + 4;
+        printf("\nNombre de cartes personnelles aléatoire choisi pour tous les joueurs : %d\n", nb_cartes_par_joueur);
 
-        // Choix des valeurs de cartes
+        // Choix du type de pioche
         printf("\nChoisissez les valeurs de carte :\n");
         printf("1. Utiliser les valeurs par défaut\n");
-        printf("2. Définir manuellement les valeurs \n");
+        printf("2. Définir manuellement les valeurs\n");
         int choix_valeurs = demander_entier_secure("Choix", 1, 2);
 
+        // Initialisation du jeu
         jeu.nb_joueurs = nb_joueurs;
         jeu.tour_actuel = 0;
         jeu.jeu_termine = 0;
@@ -66,28 +72,32 @@ int main() {
 
         melanger_pioche(jeu.pioche, jeu.nb_pioche);
 
+        // Création des joueurs
         jeu.joueurs = malloc(nb_joueurs * sizeof(Joueur));
         for (int i = 0; i < nb_joueurs; i++) {
             printf("Nom du joueur %d : ", i + 1);
             scanf("%49s", jeu.joueurs[i].nom);
-            while (getchar() != '\n'); // nettoyer le buffer
+            while (getchar() != '\n'); // vide le buffer après scanf
             initialiser_joueur(&jeu.joueurs[i], nb_cartes_par_joueur);
         }
 
+        // Distribution initiale des cartes
         distribuer_cartes(&jeu);
     }
 
+    // Boucle principale du jeu
     while (!jeu.jeu_termine) {
-        jouer_tour(&jeu);
-        verifier_fin_partie(&jeu);
+        jouer_tour(&jeu);              // Tour du joueur courant
+        verifier_fin_partie(&jeu);     // Vérifie si un joueur a révélé toutes ses cartes
 
         if (jeu.tours_restants == 0) {
             jeu.jeu_termine = 1;
             printf("\nLa partie est terminée après le dernier tour !\n");
         } else if (jeu.tours_restants > 0) {
-            jeu.tours_restants--;
+            jeu.tours_restants--; // Décompte des derniers tours restants
         }
 
+        // Proposition de quitter ou sauvegarder en cours de partie
         printf("\nSouhaitez-vous quitter la partie ? (1=Oui / 0=Non) : ");
         int quitter = demander_entier_secure("", 0, 1);
         if (quitter) {
@@ -108,9 +118,10 @@ int main() {
         }
     }
 
-    // Afficher une dernière fois le plateau avant les scores finaux
+    // Affichage final du plateau avant de montrer les scores
     afficher_plateau(&jeu);
 
+    // Calcul des scores finaux
     Resultat scores[MAX_JOUEURS];
     for (int i = 0; i < jeu.nb_joueurs; i++) {
         scores[i].score = 0;
@@ -120,7 +131,7 @@ int main() {
         }
     }
 
-    // Trier les scores par ordre croissant
+    // Tri des scores par ordre croissant (le plus petit gagne)
     for (int i = 0; i < jeu.nb_joueurs - 1; i++) {
         for (int j = i + 1; j < jeu.nb_joueurs; j++) {
             if (scores[j].score < scores[i].score) {
@@ -138,8 +149,9 @@ int main() {
         printf("\n");
     }
 
-    // Affichage du gagnant
+    // Affichage du gagnant (premier du classement)
     printf("\n🎉 Le gagnant est : %s avec %d points ! 🎉\n", scores[0].nom, scores[0].score);
-    liberer_jeu(&jeu);
+
+    liberer_jeu(&jeu); // Libération mémoire
     return 0;
 }
