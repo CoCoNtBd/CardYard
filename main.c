@@ -44,6 +44,7 @@ int main() {
 
         // Nombre de cartes personnelles aléatoire pour tous (CARD_RAND)
         int nb_cartes_par_joueur = (rand() % 7) + 4; // entre 4 et 10
+        printf("\n");
         printf("Nombre de cartes personnelles aléatoire choisi pour tous les joueurs : %d\n", nb_cartes_par_joueur);
 
         // Choix des valeurs de cartes
