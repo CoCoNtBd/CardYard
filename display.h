@@ -11,3 +11,4 @@ void afficher_scores(const Jeu* jeu, const int* scores);
 
 #endif
 
+
