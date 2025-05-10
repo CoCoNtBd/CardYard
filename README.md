@@ -1,41 +1,66 @@
 # CardYard
 
-# Description
-Jeu de cartes où 2 à 8 joueurs s'affrontent pour obtenir le score le plus bas en échangeant des cartes. Le premier joueur à révéler toutes ses cartes déclenche la fin de la partie.
+CardYard est un jeu de cartes écrit en langage C.C'est un jeu multijoueur où chaque joueur doit optimiser ses cartes afin d'obtenir le score les plus bas.Pour cela ils peuvent interagir avec la pioche ou les defausses visible.
 
-##  Installation
+## Table des matières
+1. [Description](#description)
+2. [Installation](#installation)
+3. [Utilisation](#utilisation)
+
+## Description
+
+CardYard possède un mécanisme de jeu simple : chaque joueur reçoit un nombre de cartes cachées et, à chaque tour, il a le choix de piocher ou de prendre une carte visible dans la défausse d'un joueur. Le but est que la somme des cartes du joueur soit la plus basse à la fin de la partie.
+Une fois qu'un joueur a révélé toutes ses cartes, le tour se finit. Le gagnant est celui avec la somme la moins élevée.
+
+
+### Fonctionnalités principales
+
+- Jeu en terminal avec affichage graphique ASCII des cartes
+- Défausses visibles par joueur
+- Pioche mélangée aléatoirement
+- Choix entre une pioche par défaut ou personnalisée
+- Sauvegarde et chargement de parties
+- Calcul automatique des scores finaux et affichage du gagnant
+
+### Prérequis
+
+- `gcc` pour compiler le projet
+- Un terminal compatible ANSI (pour les couleurs)
+- Un OS Linux ou Mac (ou Windows avec WSL)
+
+---
+
+## Installation
+
+1. Clonez le dépôt :
+
 ```bash
-# Cloner le dépôt (si applicable)
-git clone https://github.com/votre-username/cardyard.git
+git clone https://github.com/votre-utilisateur/cardyard.git
 cd cardyard
+```
+## Utilisation
 
-# Compiler
-make
+### Compilation :
 
-# Lancer le jeu
-./cardyard
- 
-#Choisir 2, 3 ou 4 joueurs
+```bash
+gcc -o cardyard main.c cards.c game.c player.c display.c save.c utils.c
+```
+### Lancer le jeu :
 
-# Commandes en jeu :
+```bash
+./cardYard
+```
+### exemple d'une partie 
 
-1 : Piocher une carte
+1. Nouvelle partie
+2. Charger une partie
+3. Quitter
 
-2 : Prendre une défausse
+> Choix : 1
+> Nombre de joueurs : 3
+> Valeurs des cartes : Par défaut
+> Nom joueur 1 : Alice
+> Nom joueur 2 : Bob
+> Nom joueur 3 : Carol
 
-1-6 : Choisir quelle carte échanger
 
-1/0 : Quitter (Oui/Non)
-
-# RÈGLES DU JEU
-6 cartes par joueur, faces cachées au départ
-
-Chaque tour :
-
-Piocher (1) OU Prendre une défausse (2)
-
-Choisir une de vos cartes (1-6) à échanger
-
-Fin de partie quand tous les joueurs montre toutes leurs cartes
-
-GAGNANT : Celui qui a la somme totale la plus faibl
