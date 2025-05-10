@@ -43,7 +43,7 @@ cd cardyard
 ### Compilation :
 
 ```bash
-gcc -o cardyard main.c cards.c game.c player.c display.c save.c utils.c
+make
 ```
 ### Lancer le jeu :
 
