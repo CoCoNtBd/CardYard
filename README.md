@@ -48,7 +48,7 @@ make
 ### Lancer le jeu :
 
 ```bash
-./cardYard
+./cardyard
 ```
 ### exemple d'une partie 
 
