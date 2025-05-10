@@ -1,6 +1,6 @@
 # CardYard
 
-CardYard est un jeu de cartes écrit en langage C.C'est un jeu multijoueur où chaque joueur doit optimiser ses cartes afin d'obtenir le score les plus bas.Pour cela ils peuvent interagir avec la pioche ou les defausses visible.
+CardYard est un jeu de cartes écrit en langage C. C'est un jeu multijoueur où chaque joueur doit optimiser ses cartes afin d'obtenir le score les plus bas.Pour cela ils peuvent interagir avec la pioche ou les defausses visible.
 
 ## Table des matières
 1. [Description](#description)
