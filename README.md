@@ -56,12 +56,12 @@ gcc -o cardyard main.c cards.c game.c player.c display.c save.c utils.c
 2. Charger une partie
 3. Quitter
 
-> Choix : 1
-> Nombre de joueurs : 3
-> Valeurs des cartes : Par défaut
-> Nom joueur 1 : Alice
-> Nom joueur 2 : Bob
-> Nom joueur 3 : Carol
+Choix : 1
+Nombre de joueurs : 3
+Valeurs des cartes : Par défaut
+Nom joueur 1 : Alice
+Nom joueur 2 : Bob
+Nom joueur 3 : Carol
 
 ### Exemple de suavegarde :
 
@@ -71,8 +71,8 @@ Sauvegarde réussie !
 ### Relancer une partie sauvegarder :
 
 ./cardyard
-> Choix : 2
-> Nom du fichier de sauvegarde : partie1.save
+Choix : 2
+Nom du fichier de sauvegarde : partie1.save
 
 
 
