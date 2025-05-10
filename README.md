@@ -63,4 +63,17 @@ gcc -o cardyard main.c cards.c game.c player.c display.c save.c utils.c
 > Nom joueur 2 : Bob
 > Nom joueur 3 : Carol
 
+### Exemple de suavegarde :
+
+Nom du fichier de sauvegarde : partie1.save
+Sauvegarde réussie !
+
+### Relancer une partie sauvegarder :
+
+./cardyard
+> Choix : 2
+> Nom du fichier de sauvegarde : partie1.save
+
+
+
 
