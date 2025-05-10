@@ -3,7 +3,7 @@
 # Description
 Jeu de cartes où 2 à 8 joueurs s'affrontent pour obtenir le score le plus bas en échangeant des cartes. Le premier joueur à révéler toutes ses cartes déclenche la fin de la partie.
 
-## 🚀 Installation
+##  Installation
 ```bash
 # Cloner le dépôt (si applicable)
 git clone https://github.com/votre-username/cardyard.git
@@ -14,8 +14,8 @@ make
 
 # Lancer le jeu
 ./cardyard
-
-# Choisir 2, 3 ou 4 joueurs
+ 
+#Choisir 2, 3 ou 4 joueurs
 
 # Commandes en jeu :
 
